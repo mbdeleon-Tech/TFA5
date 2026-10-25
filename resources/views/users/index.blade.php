@@ -1,0 +1,12 @@
+@extends('layouts.app')
+@section('title', 'User Accounts')
+@section('content')
+    <div class="page-heading"><div><p class="eyebrow">THE TEAM BEHIND YOUR STORE</p><h1>User Accounts</h1><p class="subtitle">Know your team and where everyone fits in.</p></div><span class="edition">TEAM DIRECTORY</span></div>
+    <section class="stats" aria-label="User summary"><div class="stat"><span>Total users</span><strong>{{ count($users) }}<small>sample accounts</small></strong></div><div class="stat"><span>Active accounts</span><strong>{{ collect($users)->where('status', 'Active')->count() }}<small>currently active</small></strong></div><div class="stat"><span>Assigned roles</span><strong>{{ collect($users)->pluck('role')->unique()->count() }}<small>across the team</small></strong></div></section>
+    <section class="directory" aria-labelledby="directory-title"><div class="directory-heading"><div><h2 id="directory-title">Team directory <span class="count-badge">{{ count($users) }}</span></h2><p>The people who keep everyday business moving.</p></div><span class="sample-tag">Sample data</span></div><div class="table-scroll" role="region" aria-label="User accounts table" tabindex="0"><table><caption class="sr-only">Fictional user accounts, roles, branches, and statuses</caption><thead><tr><th scope="col">Team member</th><th scope="col">Account ID</th><th scope="col">Role</th><th scope="col">Branch</th><th scope="col">Status</th></tr></thead><tbody>
+    @foreach ($users as $user)
+        <tr><td><div class="person"><span class="avatar tone-{{ $loop->index % 3 }}" aria-hidden="true">{{ collect(explode(' ', $user['name']))->map(fn ($part) => mb_substr($part, 0, 1))->join('') }}</span><span><strong>{{ $user['name'] }}</strong><span class="email">{{ $user['email'] }}</span></span></div></td><td class="record-id">{{ $user['id'] }}</td><td><span class="role">{{ $user['role'] }}</span></td><td>{{ $user['branch'] }}</td><td><span @class(['status', 'is-active' => $user['status'] === 'Active'])><span aria-hidden="true">●</span> {{ $user['status'] }}</span></td></tr>
+    @endforeach
+    </tbody></table></div><div class="table-footer"><span>Showing {{ count($users) }} of {{ count($users) }} users</span><span>All accounts</span></div></section>
+    <div class="info-strip"><span class="info-symbol" aria-hidden="true">i</span><p>Roles and statuses are sample labels. This foundation edition does not include sign-in or permission enforcement.</p></div>
+@endsection

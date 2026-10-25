@@ -1,0 +1,12 @@
+@extends('layouts.app')
+@section('title', 'Customer Accounts')
+@section('content')
+    <div class="page-heading"><div><p class="eyebrow">THE PEOPLE YOU SERVE</p><h1>Customer Accounts</h1><p class="subtitle">A clearer view of your customer community.</p></div><span class="edition">CUSTOMER DIRECTORY</span></div>
+    <section class="stats" aria-label="Customer summary"><div class="stat"><span>Total customers</span><strong>{{ count($customers) }}<small>sample accounts</small></strong></div><div class="stat"><span>Active accounts</span><strong>{{ collect($customers)->where('status', 'Active')->count() }}<small>currently active</small></strong></div><div class="stat"><span>Inactive accounts</span><strong>{{ collect($customers)->where('status', 'Inactive')->count() }}<small>currently inactive</small></strong></div></section>
+    <section class="directory" aria-labelledby="directory-title"><div class="directory-heading"><div><h2 id="directory-title">Customer directory <span class="count-badge">{{ count($customers) }}</span></h2><p>Contact details and account information at a glance.</p></div><span class="sample-tag">Sample data</span></div><div class="table-scroll" role="region" aria-label="Customer accounts table" tabindex="0"><table><caption class="sr-only">Fictional customer accounts, contact details, cities, and statuses</caption><thead><tr><th scope="col">Customer</th><th scope="col">Account ID</th><th scope="col">Phone</th><th scope="col">City</th><th scope="col">Status</th></tr></thead><tbody>
+    @foreach ($customers as $customer)
+        <tr><td><div class="person"><span class="avatar tone-{{ $loop->index % 3 }}" aria-hidden="true">{{ collect(explode(' ', $customer['name']))->map(fn ($part) => mb_substr($part, 0, 1))->join('') }}</span><span><strong>{{ $customer['name'] }}</strong><span class="email">{{ $customer['email'] }}</span></span></div></td><td class="record-id">{{ $customer['id'] }}</td><td>{{ $customer['phone'] }}</td><td>{{ $customer['city'] }}</td><td><span @class(['status', 'is-active' => $customer['status'] === 'Active'])><span aria-hidden="true">●</span> {{ $customer['status'] }}</span></td></tr>
+    @endforeach
+    </tbody></table></div><div class="table-footer"><span>Showing {{ count($customers) }} of {{ count($customers) }} customers</span><span>All accounts</span></div></section>
+    <div class="info-strip"><span class="info-symbol" aria-hidden="true">i</span><p>These fictional records are provided for demonstration. No real customer information is stored.</p></div>
+@endsection
